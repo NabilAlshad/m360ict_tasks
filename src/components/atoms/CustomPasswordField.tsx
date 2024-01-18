@@ -5,10 +5,12 @@ import React, { useState } from 'react';
 interface FieldProps {
 	name: string;
 	type?: string;
-	placeholder: string;
+	styles: React.CSSProperties;
+	placeholder?: string;
+	prefix?: any;
 }
 
-const CustomInputField: React.FC<FieldProps> = ({ name, type }) => {
+const CustomInputField: React.FC<FieldProps> = ({ name, styles, type, placeholder, prefix }) => {
 	const [field, meta] = useField(name);
 	const [showPassword, setShowPassword] = useState<Boolean>(false);
 
@@ -17,13 +19,23 @@ const CustomInputField: React.FC<FieldProps> = ({ name, type }) => {
 	};
 
 	return (
-		<div>
-			<div>
-				<Input {...field} name={name} type={showPassword ? 'text' : 'password'}></Input>
-				<button onClick={handleShowPassword}>show password</button>
+		<>
+			<div style={{ position: 'relative' }}>
+				<Input
+					style={styles}
+					{...field}
+					prefix={prefix}
+					name={name}
+					placeholder={placeholder}
+					type={showPassword ? 'text' : 'password'}></Input>
+				<button
+					style={{ position: 'absolute', top: '10px', right: '20px' }}
+					onClick={handleShowPassword}>
+					show password
+				</button>
 			</div>
-			{meta?.touched && meta?.error && <div>{meta?.error}</div>}
-		</div>
+			{meta?.touched && meta?.error && <div style={{ color: 'red' }}>{meta?.error}</div>}
+		</>
 	);
 };
 
